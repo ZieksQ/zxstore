@@ -9,5 +9,9 @@ public class User
   public DateTime CreatedAt { get; set; }
 
   // Foreign Key
-  public ICollection<UserRoles> UserRoles { get; set; } = [];
+  public ICollection<UserRole> UserRoles { get; set; } = [];
+
+  // Navigation Properties
+  public ICollection<Cart> Carts { get; set; } = [];
+  public ICollection<Order> Orders { get; set; } = [];
 }
