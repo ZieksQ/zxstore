@@ -12,6 +12,6 @@ public class User
   public ICollection<UserRole> UserRoles { get; set; } = [];
 
   // Navigation Properties
-  public ICollection<Cart> Carts { get; set; } = [];
+  public Cart Cart { get; set; } = null!;
   public ICollection<Order> Orders { get; set; } = [];
 }

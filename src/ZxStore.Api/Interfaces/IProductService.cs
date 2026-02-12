@@ -1,3 +1,4 @@
+using ZxStore.Api.DTOs.Product;
 using ZxStore.Api.Entities;
 
 namespace ZxStore.Api.Interfaces;
@@ -14,9 +15,12 @@ public interface IProductService
   // - Extras: - Update Price / Discount, Out of Stock
 
   Task<IEnumerable<Product>> GetProductsAsync();
-  Task<Product?> GetProductByIdAsync();
-  Task<Product> CreateProductAsync();
-  Task<Product?> UpdateProductAsync();
-  Task<bool> DeleteProductAsync();
-  Task<bool> ProductExistsAsync();
+  Task<IEnumerable<Product?>> GetProductsByCategoryAsync(int categoryId);
+  Task<IEnumerable<Product?>> SearchProductsAsync(string searchTerm);
+  Task<Product?> GetProductByIdAsync(Guid id);
+  Task<Product> CreateProductAsync(ProductDto productDto);
+  Task<Product?> UpdateProductAsync(Guid id, ProductDto productDto);
+  Task<bool> DeleteProductAsync(Guid id);
+  Task<bool> UpdateProductStockAsync(Guid id, int quantity);
+  Task<bool> ProductExistsAsync(Guid id);
 }

@@ -18,8 +18,6 @@ public class CategoryService : ICategoryService
 
   public async Task<IEnumerable<Category>> GetAllCategoryAsync()
   {
-    _logger.LogInformation("fetching all categories");
-
     return await _context.Categories
       .AsNoTracking()
       .OrderBy(c => c.Name)
@@ -28,8 +26,6 @@ public class CategoryService : ICategoryService
 
   public async Task<Category?> GetCategoryByIdAsync(int id)
   {
-    _logger.LogInformation("fetching category by id");
-
     return await _context.Categories
       .AsNoTracking()
       .FirstOrDefaultAsync(c => c.Id == id);
