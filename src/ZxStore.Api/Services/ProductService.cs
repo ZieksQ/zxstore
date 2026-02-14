@@ -6,6 +6,19 @@ using ZxStore.Api.Interfaces;
 
 namespace ZxStore.Api.Services;
 
+// FIX: Map entities and make the return value dtos
+// There is an error looping when the entity got converted
+// to JSON.
+//
+// TODO: 
+// - add mapper for dtos
+// 1. Install AutoMapper or Create Mapper Methods
+// 2. Map the entity
+// 3. return the mapped dto
+// this will ensure that the loop will not happen, also
+// this is extra layer of security for sensitive information
+// - Add a IsDeleted filter for search / get methods 
+
 public class ProductService : IProductService
 {
   private readonly AppDbContext _context;
@@ -103,12 +116,16 @@ public class ProductService : IProductService
     return product;
   }
 
+  // NOTE: This will not delete the entire data 
+  // it will only do soft delete and you can filter
+  // deleted products when fetching the data
   public async Task<bool> DeleteProductAsync(Guid id)
   {
-    var product = await _context.Products
-      .Include(p => p.CartItems)
-      .Include(p => p.OrderItems)
-      .FirstOrDefaultAsync(p => p.Id == id);
+    // var product = await _context.Products
+    //   .Include(p => p.CartItems)
+    //   .Include(p => p.OrderItems)
+    //   .FirstOrDefaultAsync(p => p.Id == id);
+    var product = await _context.Products.FindAsync(id);
 
     if (product is null) return false;
 
@@ -116,8 +133,11 @@ public class ProductService : IProductService
     // product.IsDeleted = true;
     // product.DeletedAt = DateTime.UtcNow;
 
-    _context.CartItems.RemoveRange(product.CartItems);
-    _context.Products.Remove(product);
+    product.IsDeleted = true;
+    product.DeletedAt = DateTime.UtcNow;
+
+    // _context.CartItems.RemoveRange(product.CartItems);
+    // _context.Products.Remove(product);
 
     await _context.SaveChangesAsync();
     return true;
